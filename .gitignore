@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+model_output/
+batches/
+.idea/
+*.egg-info/
+dist/
