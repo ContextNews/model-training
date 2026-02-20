@@ -10,11 +10,13 @@ Multi-label news article topic classification pipeline for the **ContextNews** p
 
 The workflow is a three-stage pipeline, run in order:
 
-1. **classify.py** — Labels raw articles from `ContextNews/articles` on HuggingFace using the OpenAI API (gpt-5 with structured output). Classifies async with concurrency control, then pushes updated dataset back to HuggingFace.
-2. **create_labelled_dataset.py** — Filters labelled rows, shuffles (seed=42), splits 80/10/10 into train/validation/test, and pushes to `ContextNews/labelled_articles`.
-3. **train.py** — Fine-tunes `distilbert-base-uncased` for multi-label classification using HuggingFace Transformers `Trainer`. Saves to `./model_output/` and optionally pushes to HuggingFace Hub.
+1. **scripts/classify.py** — Labels raw articles from `ContextNews/articles` on HuggingFace using the OpenAI API (gpt-5 with structured output). Classifies async with concurrency control, then pushes updated dataset back to HuggingFace.
+2. **scripts/create_labelled_dataset.py** — Filters labelled rows, shuffles (seed=42), splits 80/10/10 into train/validation/test, and pushes to `ContextNews/labelled_articles`.
+3. **scripts/train.py** — Fine-tunes `distilbert-base-uncased` for multi-label classification using HuggingFace Transformers `Trainer`. Saves to `./model_output/` and optionally pushes to HuggingFace Hub.
 
-`train_notebook.ipynb` is a Colab-oriented version of stage 3 that trains against `ContextNews/labelled_articles` and pushes to `ContextNews/news-classifier`. Requires a T4 GPU runtime.
+`notebooks/train_notebook.ipynb` is a Colab-oriented version of stage 3 that trains against `ContextNews/labelled_articles` and pushes to `ContextNews/news-classifier`. Requires a T4 GPU runtime.
+
+`notebooks/threshold_tuning.ipynb` tunes per-class decision thresholds on validation and evaluates on the held-out test split.
 
 ## Commands
 
@@ -23,15 +25,15 @@ The workflow is a three-stage pipeline, run in order:
 poetry install
 
 # Stage 1: Classify articles with OpenAI
-python classify.py                  # default: 1000 rows, concurrency 10
-python classify.py -n 500 -c 20    # custom row limit and concurrency
+python scripts/classify.py                  # default: 1000 rows, concurrency 10
+python scripts/classify.py -n 500 -c 20    # custom row limit and concurrency
 
 # Stage 2: Create labelled dataset splits
-python create_labelled_dataset.py
+python scripts/create_labelled_dataset.py
 
 # Stage 3: Train model
-python train.py --dataset ContextNews/articles --split 2026_02_15
-python train.py --dataset ContextNews/articles --split 2026_02_15 --epochs 5 --batch-size 16 --push-to ContextNews/news-classifier
+python scripts/train.py --dataset ContextNews/articles --split 2026_02_15
+python scripts/train.py --dataset ContextNews/articles --split 2026_02_15 --epochs 5 --batch-size 16 --push-to ContextNews/news-classifier
 ```
 
 ## Environment Variables
