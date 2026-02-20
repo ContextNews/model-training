@@ -1,0 +1,18 @@
+{
+  "politics": 0.38,
+  "geopolitics": 0.5,
+  "conflict": 0.32,
+  "crime": 0.38,
+  "law": 0.53,
+  "business": 0.29,
+  "economy": 0.27,
+  "markets": 0.53,
+  "technology": 0.34,
+  "science": 0.14,
+  "health": 0.3,
+  "environment": 0.39,
+  "society": 0.31,
+  "education": 0.1,
+  "sports": 0.2,
+  "entertainment": 0.28
+}
